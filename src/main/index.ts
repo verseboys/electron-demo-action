@@ -2,8 +2,13 @@ import { app, BrowserWindow, Menu, ipcMain, shell } from 'electron'
 import { join } from 'path'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit()
+// @ts-ignore
+if (process.platform === 'win32' && require.main) {
+  try {
+    if (require('electron-squirrel-startup')) app.quit()
+  } catch (e) {
+    // electron-squirrel-startup not installed, skip
+  }
 }
 
 let mainWindow: BrowserWindow | null = null
